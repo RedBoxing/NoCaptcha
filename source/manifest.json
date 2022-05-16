@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Sample WebExtension",
-  "version": "0.0.0",
+  "name": "NoCaptcha",
+  "version": "0.0.1",
 
   "icons": {
     "16": "assets/icons/favicon-16.png",
@@ -9,9 +9,9 @@
     "48": "assets/icons/favicon-48.png",
     "128": "assets/icons/favicon-128.png"
   },
-  "description": "Sample description",
-  "homepage_url": "https://github.com/abhijithvijayan/web-extension-starter",
-  "short_name": "Sample Name",
+  "description": "An extension to solve captcha for you",
+  "homepage_url": "https://github.com/RedBoxing/NoCaptcha",
+  "short_name": "No Captcha",
 
   "permissions": [
     "activeTab",
@@ -22,9 +22,9 @@
 
   "content_security_policy": "script-src 'self'; object-src 'self'",
 
-  "__chrome|firefox__author": "abhijithvijayan",
+  "__chrome|firefox__author": "RedBoxing",
   "__opera__developer": {
-    "name": "abhijithvijayan"
+    "name": "RedBoxing"
   },
 
   "__firefox__applications": {
@@ -55,14 +55,7 @@
     "open_in_tab": true,
     "__chrome__chrome_style": false
   },
-
-  "background": {
-    "scripts": [
-      "js/background.bundle.js"
-    ],
-    "__chrome|opera__persistent": false
-  },
-
+  
   "content_scripts": [{
     "matches": [
       "http://*/*",

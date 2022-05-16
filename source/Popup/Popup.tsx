@@ -1,53 +1,41 @@
 import * as React from 'react';
-import {browser, Tabs} from 'webextension-polyfill-ts';
 
 import './styles.scss';
 
-function openWebPage(url: string): Promise<Tabs.Tab> {
-  return browser.tabs.create({url});
+async function solveCaptcha(siteKey: string, domain: String): Promise<string> {
+  const res = await (await fetch('https://nocaptcha.redboxing.fr/api/v1/hcaptcha', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        siteKey,
+        domain
+    })
+  })).json();
+
+  if(res.success) {
+    return res.captchaKey;
+  } else {
+    throw new Error(res.message);
+  }
 }
 
 const Popup: React.FC = () => {
+  const [ siteKey, setSiteKey ] = React.useState("");
+  const [ domain, setDomain ] = React.useState("");
+  const [ captchaKey, setCaptchaKey ] = React.useState("");
+
   return (
     <section id="popup">
-      <h2>WEB-EXTENSION-STARTER</h2>
-      <button
-        id="options__button"
-        type="button"
-        onClick={(): Promise<Tabs.Tab> => {
-          return openWebPage('options.html');
-        }}
-      >
-        Options Page
-      </button>
-      <div className="links__holder">
-        <ul>
-          <li>
-            <button
-              type="button"
-              onClick={(): Promise<Tabs.Tab> => {
-                return openWebPage(
-                  'https://github.com/abhijithvijayan/web-extension-starter'
-                );
-              }}
-            >
-              GitHub
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              onClick={(): Promise<Tabs.Tab> => {
-                return openWebPage(
-                  'https://www.buymeacoffee.com/abhijithvijayan'
-                );
-              }}
-            >
-              Buy Me A Coffee
-            </button>
-          </li>
-        </ul>
-      </div>
+      <h2>NoCaptcha</h2>
+      
+      <input type="text" name="siteKey" id="siteKey" placeholder='Site Key' onChange={e => setSiteKey(e.target.value)} />
+      <br></br>
+      <input type="text" name="domain" id="domain" placeholder='Domain' onChange={e => setDomain(e.target.value)} />
+      <button onClick={async () => setCaptchaKey(await solveCaptcha(siteKey, domain))}>Get Captcha Key</button>
+
+      <p>{captchaKey}</p>
     </section>
   );
 };
